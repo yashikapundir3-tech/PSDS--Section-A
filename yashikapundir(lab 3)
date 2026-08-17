@@ -1,0 +1,126 @@
+# Q1
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+
+class Stack:
+    def __init__(self):
+        self.top = None
+
+    def push(self, data):
+        new_node = Node(data)
+        new_node.next = self.top
+        self.top = new_node
+        print(data, "pushed into stack")
+
+    def pop(self):
+        if self.top is None:
+            print("Stack Underflow")
+            return
+
+        removed = self.top.data
+        self.top = self.top.next
+        print(removed, "popped from stack")
+
+    def display(self):
+        if self.top is None:
+            print("Stack is empty")
+            return
+
+        current = self.top
+        print("Stack:", end=" ")
+
+        while current is not None:
+            print(current.data, end=" ")
+            current = current.next
+
+        print()
+
+
+stack = Stack()
+
+stack.push(10)
+stack.push(20)
+stack.push(30)
+
+stack.display()
+
+stack.pop()
+
+stack.display()
+
+stack.pop()
+
+stack.display()
+
+# Q2
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+
+class Queue:
+    def __init__(self):
+        self.front = None
+        self.rear = None
+
+    def enqueue(self, data):
+        new_node = Node(data)
+
+        if self.rear is None:
+            self.front = new_node
+            self.rear = new_node
+        else:
+            self.rear.next = new_node
+            self.rear = new_node
+
+        print(data, "enqueued into queue")
+
+    def dequeue(self):
+        if self.front is None:
+            print("Queue Underflow")
+            return
+
+        removed = self.front.data
+        self.front = self.front.next
+
+        if self.front is None:
+            self.rear = None
+
+        print(removed, "dequeued from queue")
+
+    def display(self):
+        if self.front is None:
+            print("Queue is empty")
+            return
+
+        current = self.front
+        print("Queue:", end=" ")
+
+        while current is not None:
+            print(current.data, end=" ")
+            current = current.next
+
+        print()
+
+
+queue = Queue()
+
+queue.enqueue(10)
+queue.enqueue(20)
+queue.enqueue(30)
+
+queue.display()
+
+queue.dequeue()
+
+queue.display()
+
+queue.dequeue()
+
+queue.display()
