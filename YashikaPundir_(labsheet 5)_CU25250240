@@ -1,0 +1,226 @@
+#1 Infix to Postfix
+
+class Stack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, item):
+        self.stack.append(item)
+
+    def pop(self):
+        if self.stack:
+            return self.stack.pop()
+        return None
+
+    def peek(self):
+        if self.stack:
+            return self.stack[-1]
+        return None
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+
+def precedence(operator):
+    if operator == '+' or operator == '-':
+        return 1
+    elif operator == '*' or operator == '/':
+        return 2
+    elif operator == '^':
+        return 3
+    return 0
+
+
+def infix_to_postfix(expression):
+    stack = Stack()
+    postfix = ""
+
+    for ch in expression:
+
+        if ch.isalnum():
+            postfix += ch
+
+        elif ch == '(':
+            stack.push(ch)
+
+        elif ch == ')':
+            while not stack.is_empty() and stack.peek() != '(':
+                postfix += stack.pop()
+
+            if not stack.is_empty():
+                stack.pop()
+
+        elif ch in "+-*/^":
+            while (not stack.is_empty() and
+                   stack.peek() != '(' and
+                   precedence(stack.peek()) >= precedence(ch)):
+                postfix += stack.pop()
+
+            stack.push(ch)
+
+    while not stack.is_empty():
+        postfix += stack.pop()
+
+    return postfix
+
+
+expression = input("Enter infix expression: ")
+
+result = infix_to_postfix(expression)
+
+print("Postfix expression:", result)
+
+
+#2 Postfix expression evaluation
+class IntStack:
+    def __init__(self):
+        self.stack = []
+
+    def push(self, item):
+        self.stack.append(item)
+
+    def pop(self):
+        if self.stack:
+            return self.stack.pop()
+        return None
+
+    def is_empty(self):
+        return len(self.stack) == 0
+
+
+def evaluate_postfix(expression):
+    stack = IntStack()
+
+    tokens = expression.split()
+
+    for token in tokens:
+
+        if token.isdigit():
+            stack.push(int(token))
+
+        else:
+            b = stack.pop()
+            a = stack.pop()
+
+            if token == '+':
+                result = a + b
+
+            elif token == '-':
+                result = a - b
+
+            elif token == '*':
+                result = a * b
+
+            elif token == '/':
+                result = a / b
+
+            elif token == '^':
+                result = a ** b
+
+            stack.push(result)
+
+    return stack.pop()
+
+
+expression = input("Enter postfix expression: ")
+
+result = evaluate_postfix(expression)
+
+print("Result:", result)
+
+#3
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+
+class BinarySearchTree:
+    def insert(self, root, data):
+        if root is None:
+            return Node(data)
+
+        if data < root.data:
+            root.left = self.insert(root.left, data)
+
+        elif data > root.data:
+            root.right = self.insert(root.right, data)
+
+        return root
+
+    def delete(self, root, data):
+        if root is None:
+            return root
+
+        if data < root.data:
+            root.left = self.delete(root.left, data)
+
+        elif data > root.data:
+            root.right = self.delete(root.right, data)
+
+        else:
+            if root.left is None:
+                return root.right
+
+            elif root.right is None:
+                return root.left
+
+            temp = self.find_min(root.right)
+            root.data = temp.data
+            root.right = self.delete(root.right, temp.data)
+
+        return root
+
+    def find_min(self, root):
+        current = root
+
+        while current.left is not None:
+            current = current.left
+
+        return current
+
+    def inorder(self, root):
+        if root is not None:
+            self.inorder(root.left)
+            print(root.data, end=" ")
+            self.inorder(root.right)
+
+    def preorder(self, root):
+        if root is not None:
+            print(root.data, end=" ")
+            self.preorder(root.left)
+            self.preorder(root.right)
+
+    def postorder(self, root):
+        if root is not None:
+            self.postorder(root.left)
+            self.postorder(root.right)
+            print(root.data, end=" ")
+
+
+bst = BinarySearchTree()
+root = None
+
+n = int(input("Enter number of elements: "))
+
+for i in range(n):
+    data = int(input("Enter element: "))
+    root = bst.insert(root, data)
+
+print("\nInorder traversal:")
+bst.inorder(root)
+
+print("\nPreorder traversal:")
+bst.preorder(root)
+
+print("\nPostorder traversal:")
+bst.postorder(root)
+
+data = int(input("\n\nEnter element to delete: "))
+root = bst.delete(root, data)
+
+print("\nInorder after deletion:")
+bst.inorder(root)
+
+print()
