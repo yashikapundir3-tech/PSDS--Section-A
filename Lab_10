@@ -1,0 +1,29 @@
+def digit_sum(num):
+    total = 0
+
+    while num > 0:
+        total = total + (num % 10)
+        num = num // 10
+
+    return total
+
+
+def solve():
+    N = int(input())
+    nums = list(map(int, input().split()))
+
+    count = 0
+
+    for i in range(N):
+        for j in range(i + 1, N):
+            if digit_sum(nums[i]) == digit_sum(nums[j]):
+                count = count + 1
+
+    return count
+
+
+print("Input:")
+answer = solve()
+
+print("Output:")
+print(answer)
